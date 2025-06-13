@@ -9,7 +9,6 @@ use Illuminate\Validation\Rule;
 
 class EmployeeController extends Controller
 {
-    // Display all employees
     public function index()
     {
         $employees = Employee::with('station')
@@ -19,7 +18,6 @@ class EmployeeController extends Controller
         return view('employees.index', compact('employees'));
     }
 
-    // Show create form
     public function create()
     {
         $stations = Station::all();
@@ -27,7 +25,6 @@ class EmployeeController extends Controller
         return view('employees.create', compact('stations', 'statuses'));
     }
 
-    // Store new employee
     public function store(Request $request)
     {
         $formFields = $request->validate([
@@ -48,7 +45,6 @@ class EmployeeController extends Controller
             ->with('success', 'Employee created successfully!');
     }
 
-    // Show edit form
     public function edit(Employee $employee)
     {
         $stations = Station::all();
@@ -56,7 +52,6 @@ class EmployeeController extends Controller
         return view('employees.edit', compact('employee', 'stations', 'statuses'));
     }
 
-    // Update employee
     public function update(Request $request, Employee $employee)
     {
         $formFields = $request->validate([
@@ -77,7 +72,6 @@ class EmployeeController extends Controller
             ->with('success', 'Employee updated successfully!');
     }
 
-    // Delete employee
     public function destroy(Employee $employee)
     {
         $employee->delete();
@@ -85,7 +79,6 @@ class EmployeeController extends Controller
             ->with('success', 'Employee deleted successfully!');
     }
 
-    // Show employee details
     public function show(Employee $employee)
     {
         return view('employees.show', compact('employee'));
