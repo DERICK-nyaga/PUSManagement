@@ -62,7 +62,6 @@ class EmployeeController extends Controller
             'station_id' => 'required|exists:stations,id',
             'position' => 'required|string|max:255',
             'salary' => 'required|numeric|min:0',
-            'hire_date' => 'required|date',
             'status' => ['required', Rule::in(['active', 'on_leave', 'terminated'])]
         ]);
 
