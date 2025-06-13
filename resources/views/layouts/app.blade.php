@@ -63,22 +63,3 @@
     @stack('scripts')
 </body>
 </html>
-        .editorconfig
-        .env.example
-        .gitattributes
-        .gitignore
-        PUSManagement/
-        README.md
-        artisan
-        bootstrap/
-        composer.json
-        composer.lock
-        config/
-        database/
-        phpunit.xml
-        public/
-        resources/
-        routes/
-        storage/
-        tests/
-        vite.config.js
