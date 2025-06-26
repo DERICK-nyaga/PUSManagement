@@ -77,7 +77,7 @@
                                     <h6 class="mb-1">New Employee Added</h6>
                                     <small>1 week ago</small>
                                 </div>
-                                <p class="mb-1">Derick Nyaga joined as a clerk</p>
+                                <p class="mb-1">Derick Nyaga joined as an Admin</p>
                             </a>
                         </div>
                     </div>
