@@ -35,6 +35,7 @@ class VendorController extends Controller
             'website' => 'nullable|url',
             'payment_terms' => 'required|in:net_15,net_30,net_60,due_on_receipt',
             'contract_file' => 'nullable|file|mimes:pdf,doc,docx|max:5120',
+            'is_active' => 'required|boolean',
             'notes' => 'nullable|string'
         ]);
 
