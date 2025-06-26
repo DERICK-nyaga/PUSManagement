@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
+use App\Policies\ReportPolicy;
 use Illuminate\Support\ServiceProvider;
-
+use App\Models\Report;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -21,4 +22,8 @@ class AppServiceProvider extends ServiceProvider
     {
         //
     }
+
+    protected $policies = [
+        Report::class => ReportPolicy::class,
+    ];
 }
