@@ -1,237 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pickup Points Management Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-color: #4361ee;
-            --secondary-color: #3f37c9;
-            --accent-color: #4895ef;
-            --success-color: #4cc9f0;
-            --danger-color: #f72585;
-            --warning-color: #f8961e;
-            --info-color: #0dcaf0;
-            --light-bg: #f8f9fa;
-            --dark-bg: #212529;
-            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
+    @extends('layouts.app')
 
-            --purple-color: #6f42c1;
-            --teal-color: #20c997;
-            --pink-color: #d63384;
-            --indigo-color: #6610f2;
-            --orange-color: #fd7e14;
-            --cyan-color: #0dcaf0;
-            --gray-color: #6c757d;
-        }
+     @section('content')
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--light-bg);
-            color: #333;
-        }
-
-        .sidebar {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            min-height: 100vh;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            transition: var(--transition);
-        }
-
-        .sidebar-brand {
-            padding: 1.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .nav-link {
-            color: rgba(255, 255, 255, 0.8);
-            border-radius: 5px;
-            margin: 0.2rem 0;
-            transition: var(--transition);
-        }
-
-        .nav-link:hover, .nav-link.active {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
-            transform: translateX(5px);
-        }
-
-        .nav-link i {
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
-        }
-
-        .main-content {
-            padding: 2rem;
-            background-color: var(--light-bg);
-        }
-
-        .dashboard-header {
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .stat-card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: var(--card-shadow);
-            transition: var(--transition);
-            overflow: hidden;
-            margin-bottom: 1.5rem;
-            height: 100%;
-            border-left: 4px solid;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .stat-card .card-body {
-            padding: 1.25rem;
-        }
-
-        .card-primary { border-left-color: var(--primary-color); }
-        .card-success { border-left-color: var(--success-color); }
-        .card-danger { border-left-color: var(--danger-color); }
-        .card-warning { border-left-color: var(--warning-color); }
-        .card-info { border-left-color: var(--info-color); }
-        .card-purple { border-left-color: var(--purple-color); }
-        .card-teal { border-left-color: var(--teal-color); }
-        .card-pink { border-left-color: var(--pink-color); }
-        .card-indigo { border-left-color: var(--indigo-color); }
-        .card-orange { border-left-color: var(--orange-color); }
-        .card-cyan { border-left-color: var(--cyan-color); }
-        .card-gray { border-left-color: var(--gray-color); }
-
-        .text-purple { color: var(--purple-color); }
-        .text-teal { color: var(--teal-color); }
-        .text-pink { color: var(--pink-color); }
-        .text-indigo { color: var(--indigo-color); }
-        .text-orange { color: var(--orange-color); }
-        .text-cyan { color: var(--cyan-color); }
-        .text-gray { color: var(--gray-color); }
-
-        .table-container {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: var(--card-shadow);
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .table thead th {
-            border-bottom: 2px solid #e0e0e0;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 0.5px;
-            color: #6c757d;
-        }
-
-        .badge-pill {
-            padding: 5px 10px;
-            font-weight: 500;
-            font-size: 0.75rem;
-        }
-
-        .positive {
-            color: #28a745;
-            font-weight: 600;
-        }
-
-        .negative {
-            color: #dc3545;
-            font-weight: 600;
-        }
-
-        .station-card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: var(--card-shadow);
-            transition: var(--transition);
-            margin-bottom: 1.5rem;
-            overflow: hidden;
-        }
-
-        .station-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .station-card .card-body {
-            padding: 1.25rem;
-        }
-
-        .payment-badge {
-            position: absolute;
-            right: 15px;
-            top: 15px;
-            font-size: 0.7rem;
-        }
-
-        .btn-sm {
-            padding: 0.25rem 0.5rem;
-            font-size: 0.8rem;
-        }
-
-        .search-box {
-            position: relative;
-            margin-bottom: 1.5rem;
-        }
-
-        .search-box input {
-            padding-left: 40px;
-            border-radius: 20px;
-            border: 1px solid #e0e0e0;
-        }
-
-        .search-box i {
-            position: absolute;
-            left: 15px;
-            top: 10px;
-            color: #6c757d;
-        }
-
-        .progress {
-            background-color: #e9ecef;
-            border-radius: 2px;
-            height: 4px;
-        }
-
-        .icon-container {
-            background-color: rgba(0, 0, 0, 0.05);
-            padding: 8px;
-            border-radius: 8px;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                min-height: auto;
-                width: 100%;
-            }
-            .main-content {
-                padding: 1rem;
-            }
-        }
-    </style>
-</head>
-<body>
     <div class="container-fluid">
         <div class="row">
-
             <div class="col-md-2 sidebar p-0">
                 <div class="sidebar-brand">
                     <h4 class="text-center mb-0">
@@ -266,7 +38,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ route('reports') }}">
                                 <i class="fas fa-chart-bar"></i> Reports
                             </a>
                         </li>
@@ -605,7 +377,7 @@
                     </nav>
                 </div>
 
-                <div class="row">
+                {{-- <div class="row">
                     <div class="col-md-12">
                         <div class="table-container">
                             <h5><i class="fas fa-calendar-check me-2"></i>Upcoming Payments & Bills</h5>
@@ -640,24 +412,98 @@
                             </div>
                         </div>
                     </div>
+                </div> --}}
+                <!-- resources/views/dashboard.blade.php -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-calendar-check me-2"></i>Upcoming Payments & Bills
+                </h5>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button"
+                            id="paymentsPeriodDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Next 30 Days
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="paymentsPeriodDropdown">
+                        <li><a class="dropdown-item" href="?days=7">Next 7 Days</a></li>
+                        <li><a class="dropdown-item" href="?days=14">Next 14 Days</a></li>
+                        <li><a class="dropdown-item" href="?days=30">Next 30 Days</a></li>
+                        <li><a class="dropdown-item" href="?days=60">Next 60 Days</a></li>
+                    </ul>
                 </div>
+            </div>
+            <div class="card-body">
+                @foreach($upcomingPayments as $group => $payments)
+                <div class="mb-4">
+                    <h6 class="text-muted mb-3">{{ $group }}</h6>
+                    <div class="row">
+                        @foreach($payments as $payment)
+                        <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+                            <div class="card h-100 border-start-{{ $payment->due_date->isToday() ? 'danger' : ($payment->due_date->isPast() ? 'warning' : 'primary') }} border-start-3">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <span class="badge bg-{{ $payment->due_date->isToday() ? 'danger' : ($payment->due_date->isPast() ? 'warning' : 'primary') }}">
+                                                {{ $payment->due_date->isToday() ? 'Due Today' : ($payment->due_date->isPast() ? 'Overdue' : $payment->due_date->diffForHumans()) }}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span class="badge bg-light text-dark">
+                                                {{ $payment->type }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <h5 class="mt-2">KES {{ number_format($payment->amount, 2) }}</h5>
+                                    <p class="mb-1">
+                                        <i class="fas fa-store me-1"></i>
+                                        {{ $payment->station->name }}
+                                    </p>
+                                    @if($payment->recipient)
+                                    <p class="mb-1">
+                                        <i class="fas fa-user me-1"></i>
+                                        {{ $payment->recipient }}
+                                    </p>
+                                    @endif
+                                    @if($payment->description)
+                                    <p class="text-muted small mb-2">{{ Str::limit($payment->description, 50) }}</p>
+                                    @endif
+                                    <div class="d-flex justify-content-between mt-3">
+                                        <small class="text-muted">
+                                            Due: {{ $payment->due_date->format('M d, Y') }}
+                                        </small>
+                                        <div>
+                                            <button class="btn btn-sm btn-outline-success mark-paid"
+                                                    data-payment-id="{{ $payment->id }}">
+                                                <i class="fas fa-check"></i> Paid
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endforeach
+
+                @if($upcomingPayments->isEmpty())
+                <div class="text-center py-4">
+                    <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                    <h5>No upcoming payments</h5>
+                    <p class="text-muted">All payments are settled for the selected period</p>
+                </div>
+                @endif
             </div>
         </div>
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Simple animation for cards when they come into view
-        document.addEventListener('DOMContentLoaded', function() {
-            const cards = document.querySelectorAll('.stat-card, .station-card');
-
-            cards.forEach((card, index) => {
-                setTimeout(() => {
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }, index * 100);
-            });
-        });
-    </script>
-</body>
-</html>
+            </div>
+        </div>
+    </div>
+ @section('content')
