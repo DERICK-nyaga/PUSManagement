@@ -41,7 +41,6 @@ class VendorCategoryController extends Controller
         return view('vendor-categories.show', compact('vendorCategory'));
     }
 
-
     public function edit(VendorCategory $vendorCategory)
     {
         return view('vendor-categories.edit', compact('vendorCategory'));
