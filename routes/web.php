@@ -62,7 +62,6 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth'])->group(
     function (){
-        // Route::resource('/deductions', DeductionTransactionController::class);
         Route::get('/deductions', [DeductionTransactionController::class, 'index'])->name('deductions.index');
         Route::get('/deductions/show', [DeductionTransactionController::class, 'show'])->name('deductions.show');
         Route::get('/deductions/create', [DeductionTransactionController::class, 'create'])->name('deductions.create');
@@ -83,8 +82,16 @@ Route::middleware(['auth'])->group(
         Route::get('payments/create', [PaymentController::class, 'create'])->name('payments.create');
         Route::resource('/stations', StationController::class);
         Route::resource('/employees', EmployeeController::class);
-        Route::resource('/losses', LossController::class);
-        Route::get('stations/{station}/losses', [LossController::class, 'stationLosses'])->name('stations.losses');
+        Route::resource('/losses', LossController::class)->names([
+            'index' => 'losses.index',
+            'create' => 'losses.create',
+            'stationLosses' => 'losses.station',
+            'show' => 'losses.show',
+            'edit' => 'loss.edit'
+        ]);
+        Route::get('/stationLosses', [LossController::class, 'stationLosses']);
+        Route::get('stations/losses', [LossController::class, 'stationLosses'])->name(name: 'stations.losses');
+        // Route::get('stations/{station}/losses', [LossController::class, 'stationLosses'])->name('stations.losses');
         Route::get('/employees/{employee}/edit', [EmployeeController::class, 'edit'])->name('employees.edit');
         Route::put('/employees/{employee}', [EmployeeController::class, 'update'])->name('employees.update');
         Route::resource('vendors', VendorController::class);
