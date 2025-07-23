@@ -43,9 +43,14 @@
                                     <li><a class="dropdown-item" href="{{ route('ViewAll') }}">
                                         <i class="fas fa-tasks me-2"></i> Handle Reports
                                     </a></li>
-                                    <li><a class="dropdown-item" href="#">
-                                        <i class="fas fa-tasks me-2"></i> Clear Reports
+                                    <li><a class="dropdown-item" href="{{ route('deductions.index') }}">
+                                        <i class="fas fa-tasks me-2"></i> Deductions
                                     </a></li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('losses.index') }}">
+                                            <i class="fas fa-tasks me-2"></i> Loses
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                         <li class="nav-item">
