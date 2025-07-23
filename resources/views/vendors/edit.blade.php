@@ -1,3 +1,4 @@
+@extends('layouts.app')
 @php
     $isEdit = isset($vendor);
     $action = $isEdit ? route('vendors.update', $vendor) : route('vendors.store');

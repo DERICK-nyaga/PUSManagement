@@ -57,7 +57,49 @@
             width: 20px;
             text-align: center;
         }
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
 
+.shadow-lg {
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+}
+
+.rounded-lg {
+    border-radius: 1rem !important;
+}
+
+.card {
+    border: none;
+}
+
+.form-control {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #e0e0e0;
+}
+
+.form-control:focus {
+    border-color: #764ba2;
+    box-shadow: 0 0 0 0.25rem rgba(118, 75, 162, 0.25);
+}
+
+.btn-primary {
+    background-color: #764ba2;
+    border-color: #764ba2;
+}
+
+.btn-primary:hover {
+    background-color: #5d3a7a;
+    border-color: #5d3a7a;
+}
+.mb-0 {
+    margin-left: 4%;
+}
+#row {
+    margin-right: 7%;
+    padding: 15px;
+}
         .main-content {
             padding: 2rem;
             background-color: var(--light-bg);
@@ -118,6 +160,23 @@
             margin-bottom: 2rem;
         }
 
+    .badge {
+        font-size: 0.85em;
+        font-weight: 500;
+        padding: 0.35em 0.65em;
+    }
+    .table td, .table th {
+        vertical-align: middle;
+    }
+    .card-title {
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+    .card-text {
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
         .table thead th {
             border-bottom: 2px solid #e0e0e0;
             font-weight: 600;
@@ -152,6 +211,20 @@
             overflow: hidden;
         }
 
+        form.d-inline {
+            display: inline;
+            margin: 0;
+            padding: 0;
+        }
+
+        .table td:last-child {
+            white-space: nowrap;
+        }
+
+        .btn-group-sm > .btn {
+            padding: 0.25rem 0.5rem;
+        }
+
         .station-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
@@ -167,66 +240,66 @@
             top: 15px;
             font-size: 0.7rem;
         }
-/* Payments */
-.payment-card {
-    transition: all 0.3s ease;
-}
 
-.payment-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
+        .payment-card {
+            transition: all 0.3s ease;
+        }
 
-.payment-status-badge {
-    position: absolute;
-    right: 15px;
-    top: 15px;
-    font-size: 0.7rem;
-}
+        .payment-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
 
-.mark-paid {
-    transition: all 0.2s ease;
-}
+        .payment-status-badge {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            font-size: 0.7rem;
+        }
 
-.mark-paid:hover {
-    background-color: #28a745 !important;
-    color: white !important;
-}
-/* Vendor Category Show Page Styles */
-.vendor-category-stats {
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-}
+        .mark-paid {
+            transition: all 0.2s ease;
+        }
 
-.vendor-category-stats .stat-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px solid #eee;
-}
+        .mark-paid:hover {
+            background-color: #28a745 !important;
+            color: white !important;
+        }
 
-.vendor-category-stats .stat-item:last-child {
-    border-bottom: none;
-}
+        .vendor-category-stats {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
 
-.recent-vendors-list .list-group-item {
-    padding: 12px 15px;
-    transition: all 0.2s;
-}
+        .vendor-category-stats .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
 
-.recent-vendors-list .list-group-item:hover {
-    background-color: #f8f9fa;
-}
-.empty-state {
-    opacity: 0.7;
-}
+        .vendor-category-stats .stat-item:last-child {
+            border-bottom: none;
+        }
 
-.empty-state i {
-    font-size: 4rem;
-    margin-bottom: 1rem;
-}
+        .recent-vendors-list .list-group-item {
+            padding: 12px 15px;
+            transition: all 0.2s;
+        }
+
+        .recent-vendors-list .list-group-item:hover {
+            background-color: #f8f9fa;
+        }
+        .empty-state {
+            opacity: 0.7;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
         .btn-sm {
             padding: 0.25rem 0.5rem;
             font-size: 0.8rem;
@@ -267,6 +340,59 @@
             justify-content: center;
         }
 
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            z-index: 100;
+            padding: 20px 0;
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+        }
+
+        .main-content {
+            margin-left: 16.666667%;
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+        }
+
+        .container-fluid {
+            padding-right: 15px;
+            padding-left: 15px;
+        }
+
+        form {
+            margin-left: 16.666667%;
+            margin-top: 2%;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar {
+            margin-left: 14%;
+        }
+        @media (max-width: 992px) {
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+        .nav-link {
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
         @media (max-width: 768px) {
             .sidebar {
                 min-height: auto;

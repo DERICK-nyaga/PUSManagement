@@ -6,9 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\Loss;
 use App\Models\Station;
 use App\Models\Employee;
+use NunoMaduro\Collision\Adapters\Phpunit\State;
+
 class LossController extends Controller
 {
-     public function index()
+        public function index()
     {
         $losses = Loss::with(['station', 'employee'])
             ->orderBy('date_occurred', 'desc')
@@ -52,22 +54,40 @@ class LossController extends Controller
             ->with('success', 'Loss recorded successfully');
     }
 
-    public function show(string $id)
+    public function show(Loss $loss)
     {
-
+        return view('losses.show', compact('loss'));
     }
 
-    public function edit(string $id)
+    public function edit(Loss $loss)
     {
+        $stations = Station::all();
+        $employees = Employee::where('status', 'active')->get();
+        return view('loss.edit', compact('loss', 'stations', 'employees'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, Loss $loss)
     {
+        $validated = $request->validate([
+            'station_id' => 'required|exists:stations,id',
+            'employee_id' => 'nullable|exists:employees,id',
+            'amount' => 'required|numeric|min:0',
+            'description' => 'required|string|max:1000',
+            'type' => 'required|in:cash,inventory,equipment,other',
+            'date_occurred' => 'required|date',
+        ]);
 
+        $loss->update($validated);
+
+        return redirect()->route('losses.index')
+            ->with('success', 'Loss updated successfully');
+    }
+    public function destroy(Loss $loss)
+    {
+        $loss->delete();
+
+        return redirect()->route('losses.index')
+            ->with('success', 'Loss deleted successfully');
     }
 
-    public function destroy(string $id)
-    {
-
-    }
 }

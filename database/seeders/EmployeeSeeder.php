@@ -2,50 +2,51 @@
 
 namespace Database\Seeders;
 
-use App\Models\Employee;
-use App\Models\Station;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class EmployeeSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
     public function run()
     {
-        $stations = Station::all();
-        $positions = ['Manager', 'Assistant', 'Clerk', 'Security', 'Cleaner'];
-
-        foreach ($stations as $station) {
-            $employeeCount = rand(1, 5); // 1-5 employees per station
-
-            for ($i = 0; $i < $employeeCount; $i++) {
-                Employee::create([
-                    'name' => $this->generateKenyanName(),
-                    'salary' => $this->generateSalary($positions[$i % count($positions)]),
-                    'station_id' => $station->id,
-                ]);
-            }
-        }
-    }
-
-    private function generateKenyanName()
-    {
-        $firstNames = ['John', 'Mary', 'James', 'Elizabeth', 'Robert', 'Margaret', 'Michael', 'Susan', 'William', 'Dorothy'];
-        $lastNames = ['Maina', 'Njeri', 'Kamau', 'Wambui', 'Ochieng', 'Achieng', 'Kipchoge', 'Chebet', 'Omondi', 'Atieno'];
-
-        return $firstNames[array_rand($firstNames)] . ' ' . $lastNames[array_rand($lastNames)];
-    }
-
-    private function generateSalary($position)
-    {
-        $baseSalaries = [
-            'Manager' => 45000,
-            'Assistant' => 35000,
-            'Clerk' => 25000,
-            'Security' => 20000,
-            'Cleaner' => 15000
+        $positions = [
+            'Manager', 'Supervisor', 'Team Lead',
+            'Developer', 'Designer', 'Accountant',
+            'HR Specialist', 'Sales Representative', 'Support Technician'
         ];
 
-        // Add some variation (±20%)
-        $base = $baseSalaries[$position];
-        return $base * (0.8 + (mt_rand(0, 40) / 100));
+        $statuses = ['active', 'on_leave', 'terminated', 'retired'];
+
+        $employees = [];
+
+        for ($i = 1; $i <= 50; $i++) {
+            $firstName = fake()->firstName();
+            $lastName = fake()->lastName();
+            $email = strtolower($firstName . '.' . $lastName) . '@example.com';
+
+            $employees[] = [
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'email' => $email,
+                'phone' => fake()->phoneNumber(),
+                'station_id' => rand(1, 10),
+                'employee_id' => 'EMP' . str_pad($i, 5, '0', STR_PAD_LEFT),
+                'position' => $positions[array_rand($positions)],
+                'salary' => rand(30000, 120000),
+                'hire_date' => Carbon::today()->subDays(rand(1, 365 * 5)),
+                'status' => $statuses[array_rand($statuses)],
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        DB::table('employees')->insert($employees);
     }
 }

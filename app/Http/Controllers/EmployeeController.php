@@ -31,8 +31,9 @@ class EmployeeController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:employees',
-            'phone' => 'required|string|max:20',
+            'phone' => 'required|string|unique:employees|max:20',
             'station_id' => 'required|exists:stations,id',
+            'employee_id' => 'required|string|unique:employees|min:7|max:12',
             'position' => 'required|string|max:255',
             'salary' => 'required|numeric|min:0',
             'hire_date' => 'required|date',
@@ -62,7 +63,8 @@ class EmployeeController extends Controller
             'station_id' => 'required|exists:stations,id',
             'position' => 'required|string|max:255',
             'salary' => 'required|numeric|min:0',
-            'status' => ['required', Rule::in(['active', 'on_leave', 'terminated'])]
+            'status' => ['required', Rule::in(['active', 'on_leave', 'terminated'])],
+            'deduction_balance' => 'required|numeric|min:0'
         ]);
 
         $employee->update($formFields);

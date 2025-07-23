@@ -50,7 +50,7 @@ class ReportController extends Controller
             'user_id' => Auth::id(),
         ]);
 
-        return redirect()->route('reports.index')
+        return redirect()->route('CheckReports')
             ->with('success', 'Report created successfully.');
     }
 
@@ -93,7 +93,7 @@ class ReportController extends Controller
             'file_path' => $filePath,
         ]);
 
-        return redirect()->route('reports.index')
+        return redirect()->route('CheckReports')
             ->with('success', 'Report updated successfully.');
     }
 
@@ -107,7 +107,7 @@ class ReportController extends Controller
 
         $report->delete();
 
-        return redirect()->route('reports.index')
+        return redirect()->route('CheckReports')
             ->with('success', 'Report deleted successfully.');
     }
     public function download(Report $report)
@@ -119,5 +119,15 @@ class ReportController extends Controller
         }
 
         return Storage::download($report->file_path);
+    }
+
+    public function masters()
+    {
+        return view('reports.masters');
+    }
+
+    public function clearReports()
+    {
+        return view ('reports.clear');
     }
 }

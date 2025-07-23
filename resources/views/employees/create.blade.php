@@ -51,6 +51,15 @@
                             </div>
 
                             <div class="col-md-6">
+                                <label for="employee_id" class="form-label">Employee_Id</label>
+                                <input type="text" class="form-control @error('employee_id') is-invalid @enderror"
+                                    id="employee_id" name="employee_id" value="{{ old('employee_id') }}" required>
+                                @error('employee_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-6">
                                 <label for="station_id" class="form-label">Station</label>
                                 <select class="form-select @error('station_id') is-invalid @enderror"
                                         id="station_id" name="station_id" required>
@@ -80,6 +89,15 @@
                                 <input type="number" step="0.01" class="form-control @error('salary') is-invalid @enderror"
                                        id="salary" name="salary" value="{{ old('salary') }}" required>
                                 @error('salary')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="deductions" class="form-label">Deductions (KES)</label>
+                                <input type="number" step="0.01" class="form-control @error('deduction_balance') is-invalid @enderror"
+                                       id="deduction_balance" name="deduction_balance" value="{{ old('deduction_balance') }}" required>
+                                @error('deduction_balance')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>

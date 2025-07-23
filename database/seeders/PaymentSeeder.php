@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Payment1;
+use App\Models\Payment;
 use App\Models\Station;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -22,7 +22,7 @@ class PaymentSeeder extends Seeder
                 $type = $paymentTypes[array_rand($paymentTypes)];
                 $daysFromNow = rand(-10, 30); // Some past and future dates
 
-                Payment1::create([
+                Payment::create([
                     'amount' => $this->generatePaymentAmount($type),
                     'type' => $type,
                     'due_date' => Carbon::now()->addDays($daysFromNow)->toDateTimeString(),

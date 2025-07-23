@@ -12,6 +12,8 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         'role' => \App\Http\Middleware\CheckRole::class,
+        'auth' => \App\Http\Middleware\CheckUserIsAuthenticated::class,
+
     ];
 
     /**

@@ -1,34 +1,52 @@
 @extends('layouts.app')
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">Reports</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('reports.index') }}">All Reports</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('reports.create') }}">Create Report</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="btn btn-link nav-link">Logout</button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="#">
+            <i class="fas fa-chart-line me-2"></i>Reports System
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <div class="container mt-4">
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-        @yield('content')
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item mx-1">
+                    <a class="nav-link px-3 py-2 rounded-3 {{ request()->routeIs('CheckReports') ? 'active bg-white text-primary' : '' }}"
+                       href="{{ route('CheckReports') }}">
+                        <i class="fas fa-list-check me-2"></i>All Reports
+                    </a>
+                </li>
+                <li class="nav-item mx-1">
+                    <a class="nav-link px-3 py-2 rounded-3 {{ request()->routeIs('reports.create') ? 'active bg-white text-primary' : '' }}"
+                       href="{{ route('reports.create') }}">
+                        <i class="fas fa-plus-circle me-2"></i>Create Report
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="btn btn-outline-danger px-4 py-2 border-0">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
     </div>
+</nav>
+
+<div class="container mt-4">
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show shadow-sm">
+            <i class="fas fa-check-circle me-2"></i>
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    @yield('content')
+</div>

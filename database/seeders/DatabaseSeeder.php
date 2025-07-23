@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
             StationSeeder::class,
             EmployeeSeeder::class,
             PaymentSeeder::class,
+            DeductionTransactionSeeder::class,
         ]);
     }
 }

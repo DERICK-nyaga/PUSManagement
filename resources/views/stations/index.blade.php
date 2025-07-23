@@ -48,7 +48,8 @@
                                     {{ $station->monthly_loss >= 0 ? 'Profitable' : 'Loss' }}
                                 </span>
                             </td>
-                            <td>
+
+                            <td class="td">
                                 <a href="{{ route('stations.show', $station->id) }}" class="btn btn-sm btn-info" title="View">
                                     <i class="fas fa-eye"></i>
                                 </a>

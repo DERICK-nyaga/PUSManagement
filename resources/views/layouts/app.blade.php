@@ -9,18 +9,21 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="/css/modifiedstyles.css">
-    <link rel="stylesheet" href="/css/fixedstyles.css">
     @stack('styles')
 </head>
 <body>
-
     <div class="container-fluid">
         <div class="row">
+            @auth
+                @include('partials.sidebar')
+            @endauth
+
             <div class="col-md-10 main-content">
                 @yield('content')
             </div>
         </div>
     </div>
+
     <script src="{{ mix('js/payments.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     @stack('scripts')

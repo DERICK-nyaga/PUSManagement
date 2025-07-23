@@ -1,4 +1,3 @@
-<!-- resources/views/reports/form.blade.php -->
 <div class="card">
     <div class="card-body">
         <form method="POST" action="{{ $action }}" enctype="multipart/form-data">
@@ -64,7 +63,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary">Save</button>
-            <a href="{{ route('reports.index') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('CheckReports') }}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </div>
