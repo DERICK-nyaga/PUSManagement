@@ -44,6 +44,18 @@
                             </div>
                         </div>
 
+            <div class="mb-4">
+                <label for="status" class="form-label">Role</label>
+                <select class="form-select @error('role') is-invalid @enderror" id="role" name="role" required>
+                    <option value="admin" @selected(old('role', $report->admin ?? '') === 'admin')>Admin</option>
+                    <option value="manager" @selected(old('role', $report->manager ?? '') === 'manager')>Manager</option>
+                    <option value="staff" @selected(old('role', $report->staff?? '') === 'staff')>Staff</option>
+                </select>
+                @error('role')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
                         <div class="mb-4">
                             <div class="form-floating">
                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
