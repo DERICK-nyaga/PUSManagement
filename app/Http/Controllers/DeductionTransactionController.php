@@ -2,26 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Employee;
 use App\Models\DeductionTransaction;
+use App\Models\Employee;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 class DeductionTransactionController extends Controller
 {
 
+// index method 5
+
 public function index(Request $request)
 {
-    $query = DeductionTransaction::with('employee')
-                ->orderBy('transaction_date', 'desc')
-                ->orderBy('created_at', 'desc');
+    $query = DeductionTransaction::with('employee');
 
-    if ($request->filled('employee_id')) {
-        $query->where('employee_id', $request->employee_id);
+    if ($request->filled('employee_first_name')) {
+        $query->whereHas('employee', function($q) use ($request) {
+            $q->where('first_name', $request->employee_first_name);
+        });
     }
 
     if ($request->filled('type')) {
         $query->where('type', $request->type);
+    }
+
+    if ($request->filled('reason')) {
+        $query->where('reason', $request->reason);
     }
 
     if ($request->filled('start_date')) {
@@ -32,34 +38,63 @@ public function index(Request $request)
         $query->where('transaction_date', '<=', $request->end_date);
     }
 
-    $transactions = $query->paginate(25);
+    $transactions = $query->orderBy('transaction_date', 'desc')->paginate(20);
 
-    $totalCredits = DeductionTransaction::where('amount', '<', 0)->sum('amount');
-    $totalDebits = DeductionTransaction::where('amount', '>', 0)->sum('amount');
-    $netBalance = $totalCredits + $totalDebits;
+    // Calculate totals properly
+    $initialDeductions = $query->clone()->where('type', 'initial')->sum('amount');
+    $additionalDeductions = $query->clone()->where('type', 'additional')->sum('amount');
+    $adjustments = $query->clone()->where('type', 'refund')->sum('amount');
 
+    // Regular deductions (excluding salary advances)
+    $totalDeductions = $initialDeductions + $additionalDeductions + $adjustments;
 
-    $employees = Employee::orderBy('id')->get();
+    // Salary Advances (treated as money employee owes)
+    $salaryAdvances = $query->clone()->where('reason', 'salary advance')->sum('amount');
+    $salaryAdvanceCount = $query->clone()->where('reason', 'salary advance')->count();
+
+    // Counts for stats
+    $regularDeductionCount = $query->clone()
+        ->where('reason', '!=', 'salary advance')
+        ->where('type', '!=', 'payment')
+        ->count();
+
+    $paymentCount = $query->clone()->where('type', 'payment')->count();
+
+    $totalPayments = $query->clone()->where('type', 'payment')->sum('amount');
+
+    // Total Employee Owes = Regular deductions + salary advances
+    $totalEmployeeOwes = $totalDeductions + $salaryAdvances;
+
+    // Outstanding Balance = What employee owes minus payments made
+    $outstandingBalance = $totalEmployeeOwes - $totalPayments;
+
+    $employees = Employee::orderBy('first_name')->get();
 
     return view('deductions.index', compact(
         'transactions',
         'employees',
-        'totalCredits',
-        'totalDebits',
-        'netBalance'
+        'initialDeductions',
+        'additionalDeductions',
+        'adjustments',
+        'totalDeductions',
+        'salaryAdvances',
+        'salaryAdvanceCount',
+        'regularDeductionCount',
+        'paymentCount',
+        'totalEmployeeOwes',
+        'totalPayments',
+        'outstandingBalance'
     ));
 }
-    public function create(Employee $employee)
+    public function create()
     {
+        $employees = Employee::all();
         $types = [
             'initial' => 'Initial Deduction',
             'additional' => 'Additional Deduction',
-            'adjustment' => 'Adjustment',
-            'payment' => 'Payment (Reduction)'
+            'refund' => 'Refund',
+            'payment' => 'Payment Made',
         ];
-
-        $employees = Employee::all();
-        // $employees = Employee::orderBy('name')->get();
 
         return view('deductions.create', compact('employees', 'types'));
     }
@@ -67,100 +102,151 @@ public function index(Request $request)
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'employee_id' => 'required|exists:employees,id',
-            'amount' => 'required|numeric|min:0',
-            'type' => 'required|in:initial,additional,adjustment,payment',
+            'employee_id' => 'required|string',
+            'type' => 'required|string|in:initial,additional,refund,payment',
+            'amount' => 'required|numeric|min:0.01',
             'reason' => 'required|string|max:255',
             'notes' => 'nullable|string',
-            'order_number' => 'required',
+            'order_number' => 'nullable|string|max:255',
             'transaction_date' => 'required|date',
         ]);
 
-        $employee = Employee::findOrFail($validated['employee_id']);
+        try {
+            DB::beginTransaction();
 
-        if ($validated['type'] === 'payment') {
-            $validated['amount'] = -abs($validated['amount']);
-        } else {
-            $validated['amount'] = abs($validated['amount']);
+            // Split the employee_id to get both ID and name
+            $employeeData = explode('|', $validated['employee_id']);
+            $employeeId = $employeeData[0];
+            $employeeName = $employeeData[1];
+
+            // Get the latest transaction to calculate previous balance
+            $latestTransaction = $this->getLatestTransaction($employeeId);
+            $previousBalance = $latestTransaction ? $latestTransaction->new_balance : 0;
+
+            // Calculate new balance based on transaction type
+            $newBalance = $this->calculateNewBalance(
+                $previousBalance,
+                $validated['amount'],
+                $validated['type']
+            );
+
+            $deductionData = [
+                'employee_id' => $employeeId,
+                'employee_name' => $employeeName,
+                'type' => $validated['type'],
+                'amount' => $validated['amount'],
+                'reason' => $validated['reason'],
+                'notes' => $validated['notes'],
+                'order_number' => $validated['order_number'],
+                'transaction_date' => $validated['transaction_date'],
+                'previous_balance' => $previousBalance,
+                'new_balance' => $newBalance,
+            ];
+
+            $deduction = DeductionTransaction::create($deductionData);
+
+            DB::commit();
+
+            return redirect()->route('deductions.index', $deduction->id)
+                ->with('success', 'Deduction transaction recorded successfully!');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return back()->withInput()
+                ->with('error', 'Error recording transaction: ' . $e->getMessage());
         }
-
-        $validated['user_id'] = Auth::id();
-
-        $employee->deductionTransactions()->create($validated);
-        $employee->updateBalance();
-
-        return redirect()->route('deductions.index', $employee)
-            ->with('success', 'Deduction transaction recorded successfully.');
     }
 
-    public function show(Employee $employee, DeductionTransaction $transaction)
+    private function getLatestTransaction($employeeId)
     {
-        return view('deductions.show', compact('employee', 'transaction'));
-    }
-
-    public function edit(Employee $employee, DeductionTransaction $transaction)
-    {
-        $types = [
-            'initial' => 'Initial Deduction',
-            'additional' => 'Additional Deduction',
-            'adjustment' => 'Adjustment',
-            'payment' => 'Payment (Reduction)'
-        ];
-
-        return view('deductions.edit', compact('employee', 'transaction', 'types'));
-    }
-
-    public function update(Request $request, Employee $employee, DeductionTransaction $transaction)
-    {
-        $validated = $request->validate([
-            'amount' => 'required|numeric|min:0',
-            'type' => 'required|in:initial,additional,adjustment,payment',
-            'reason' => 'required|string|max:255',
-            'notes' => 'nullable|string',
-            'transaction_date' => 'required|date',
-        ]);
-
-        if ($validated['type'] === 'payment') {
-            $validated['amount'] = -abs($validated['amount']);
-        } else {
-            $validated['amount'] = abs($validated['amount']);
-        }
-
-        $transaction->update($validated);
-        $employee->updateBalance();
-
-        return redirect()->route('deductions.index', $employee)
-            ->with('success', 'Deduction transaction updated successfully.');
-    }
-    public function employeeTransactions(Employee $employee)
-    {
-        $transactions = $employee->deductionTransactions()
+        return DeductionTransaction::where('employee_id', $employeeId)
             ->orderBy('transaction_date', 'desc')
-            ->paginate(15);
-
-        $totalCredits = $employee->deductionTransactions()
-            ->where('amount', '<', 0)
-            ->sum('amount');
-
-        $totalDebits = $employee->deductionTransactions()
-            ->where('amount', '>', 0)
-            ->sum('amount');
-
-        $netBalance = $totalCredits + $totalDebits;
-
-        return view('deductions.employee_view', compact(
-            'employee',
-            'transactions',
-            'totalCredits',
-            'totalDebits',
-            'netBalance'
-        ));
+            ->orderBy('created_at', 'desc')
+            ->first();
     }
-    public function destroy(Employee $employee, DeductionTransaction $transaction)
-    {
-        $transaction->delete();
-        $employee->updateBalance();
 
-        return back()->with('success', 'Transaction deleted successfully.');
+    private function calculateNewBalance($previousBalance, $amount, $type)
+    {
+        switch ($type) {
+            case 'initial':
+            case 'additional':
+                // Add to debt (balance becomes more negative)
+                return $previousBalance - $amount;
+
+            case 'refund':
+                // Reduce debt (balance becomes less negative)
+                return $previousBalance + $amount;
+
+            case 'payment':
+                // Payment reduces debt (balance becomes less negative)
+                return $previousBalance + $amount;
+
+            default:
+                return $previousBalance;
+        }
+    }
+    public function show(DeductionTransaction $deduction)
+    {
+        return view('deductions.show', compact('deduction'));
+    }
+
+    public function employeeHistory($employeeId)
+    {
+        $employee = Employee::findOrFail($employeeId);
+        $transactions = DeductionTransaction::where('employee_id', $employeeId)
+            ->orderBy('transaction_date', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->paginate(20);
+
+        $currentBalance = $this->getLatestTransaction($employeeId)?->new_balance ?? 0;
+
+        return view('deductions.history', compact('employee', 'transactions', 'currentBalance'));
+    }
+
+public function getCurrentBalance($employeeId)
+{
+    try {
+        Log::info('getCurrentBalance called', ['employeeId' => $employeeId]);
+
+        // Validate employee exists
+        $employee = Employee::find($employeeId);
+        if (!$employee) {
+            Log::warning('Employee not found', ['employeeId' => $employeeId]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Employee not found'
+            ], 404);
+        }
+
+        $latestTransaction = $this->getLatestTransaction($employeeId);
+        $currentBalance = $latestTransaction ? $latestTransaction->new_balance : 0;
+
+        Log::info('Balance fetched successfully', [
+            'employeeId' => $employeeId,
+            'employee_name' => $employee->first_name . ' ' . $employee->last_name,
+            'current_balance' => $currentBalance
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'current_balance' => $currentBalance,
+            'formatted_balance' => number_format($currentBalance, 2),
+            'employee_name' => $employee->first_name . ' ' . $employee->last_name
+        ]);
+    } catch (\Exception $e) {
+        Log::error('Error in getCurrentBalance', [
+            'employeeId' => $employeeId,
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ]);
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Error fetching balance: ' . $e->getMessage()
+        ], 500);
     }
 }
+}
+
+
