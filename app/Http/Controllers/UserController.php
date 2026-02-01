@@ -13,27 +13,20 @@ class UserController extends Controller
         $users = User::all();
         return view('users.index', compact('users'));
     }
-
     public function create()
     {
         return view('users.create');
     }
-
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:4|confirmed',
             'role' => 'required|in:admin,manager,staff'
         ]);
 
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => $request->role
-        ]);
+        User::create($validated);
 
         return redirect()->route('users.index')
             ->with('success', 'User created successfully.');
@@ -68,7 +61,6 @@ class UserController extends Controller
         return redirect()->route('users.index')
             ->with('success', 'User updated successfully.');
     }
-
     public function destroy(User $user)
     {
         $user->delete();

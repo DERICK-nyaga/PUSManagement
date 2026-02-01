@@ -6,7 +6,7 @@
         <div class="col-md-8">
             <div class="card shadow-sm">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Employee Details: {{ $employee->full_name }}</h5>
+                    <h5 class="mb-0" id="new-employee">Employee Details: {{ $employee->full_name }}</h5>
                     <div>
                         <a href="{{ route('employees.edit', $employee->id) }}" class="btn btn-sm btn-warning">
                             <i class="fas fa-edit"></i> Edit

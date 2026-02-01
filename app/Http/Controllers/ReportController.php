@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class ReportController extends Controller
 {
     use AuthorizesRequests;
+
     public function index()
     {
         $reports = Report::with('user')
@@ -26,6 +27,7 @@ class ReportController extends Controller
     {
         return view('reports.create');
     }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -50,7 +52,7 @@ class ReportController extends Controller
             'user_id' => Auth::id(),
         ]);
 
-        return redirect()->route('CheckReports')
+        return redirect()->route('reports.index')
             ->with('success', 'Report created successfully.');
     }
 
@@ -65,6 +67,7 @@ class ReportController extends Controller
         $this->authorize('update', $report);
         return view('reports.edit', compact('report'));
     }
+
     public function update(Request $request, Report $report)
     {
         $this->authorize('update', $report);
@@ -93,7 +96,7 @@ class ReportController extends Controller
             'file_path' => $filePath,
         ]);
 
-        return redirect()->route('CheckReports')
+        return redirect()->route('reports.index')
             ->with('success', 'Report updated successfully.');
     }
 
@@ -107,9 +110,10 @@ class ReportController extends Controller
 
         $report->delete();
 
-        return redirect()->route('CheckReports')
+        return redirect()->route('reports.index')
             ->with('success', 'Report deleted successfully.');
     }
+
     public function download(Report $report)
     {
         $this->authorize('view', $report);
@@ -128,6 +132,34 @@ class ReportController extends Controller
 
     public function clearReports()
     {
-        return view ('reports.clear');
+        return view('reports.clear');
+    }
+
+    public function handleReports()
+    {
+        if (Auth::user()->role !== 'admin') {
+            abort(403);
+        }
+
+        $reports = Report::with('user')
+            ->latest()
+            ->paginate(10);
+
+        return view('reports.handle', compact('reports'));
+    }
+
+    public function bulkActions(Request $request)
+    {
+        // Handle bulk
+    }
+
+    public function approve(Report $report)
+    {
+        // Approve report
+    }
+
+    public function reject(Report $report)
+    {
+        // Reject report
     }
 }

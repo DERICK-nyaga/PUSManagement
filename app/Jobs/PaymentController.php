@@ -88,7 +88,6 @@ class PaymentController extends Controller
         ]);
 
         if ($request->hasFile('attachment')) {
-            // Delete old attachment if exists
             if ($payment->attachment_path) {
                 Storage::delete($payment->attachment_path);
             }
@@ -113,7 +112,6 @@ class PaymentController extends Controller
             ->with('success', 'Payment deleted successfully!');
     }
 
-    // Additional actions
     public function approve(Payment $payment)
     {
         $payment->update([
@@ -134,7 +132,6 @@ class PaymentController extends Controller
 
         return back()->with('success', 'Payment marked as paid!');
     }
-    // app/Models/Payment.php
 public function isOverdue()
 {
     return $this->due_date->isPast() && $this->status != 'paid';

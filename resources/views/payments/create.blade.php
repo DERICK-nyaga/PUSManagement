@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Create New Payment')
-
+@section('content')
 
 @php
     $isEdit = isset($payment);
@@ -66,12 +66,6 @@
                 <input type="number" step="0.01" class="form-control" id="amount" name="amount"
                        value="{{ old('amount', $payment->amount ?? '') }}" required>
             </div>
-
-            {{-- <div class="mb-3">
-                <label for="due_date" class="form-label">Due Date*</label>
-                <input type="date" class="form-control" id="due_date" name="due_date"
-                       value="{{ old('due_date', isset($payment) ? $payment->due_date->format('Y-m-d') : '') }}" required>
-            </div> --}}
 
             <div class="mb-3">
                 <label for="due_date" class="form-label">Due Date*</label>
@@ -151,7 +145,8 @@
     </div>
 </form>
 
-@push('scripts')
+@endsection
+{{-- @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const isRecurringCheckbox = document.getElementById('is_recurring');
@@ -162,13 +157,11 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('recurrence').required = isRecurringCheckbox.checked;
     }
 
-    // Initial state
     toggleRecurrenceFields();
 
-    // Add event listener
     isRecurringCheckbox.addEventListener('change', toggleRecurrenceFields);
 });
 </script>
-@endpush
+@endpush --}}
 
 

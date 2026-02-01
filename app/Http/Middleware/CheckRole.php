@@ -9,11 +9,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CheckRole
 {
-    public function handle(Request $request, Closure $next, string $role): Response
+    public function handle(Request $request, Closure $next, string $role)
     {
-        $user = Auth::user();
-        if (!Auth::check() || Auth::user()->role !== $role) {
-            abort(403, "Unauthorized action. {$role} access required.");
+        if (!$request->user() || $request->user()->role !== $role) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized access'
+            ], 403);
         }
 
         return $next($request);

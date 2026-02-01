@@ -10,16 +10,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('deduction_transactions', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('employee_id')->constrained()->onDelete('cascade');
-            $table->decimal('amount', 12, 2); // Positive for additions, negative for deductions
-            $table->string('type'); // e.g., 'initial', 'additional', 'adjustment', 'payment'
-            $table->string('reason');
-            $table->text('notes')->nullable();
-            $table->string('order_number')->nullable();
-            $table->date('transaction_date');
-            // $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Who made the change
-            $table->timestamps();
+                $table->id();
+                $table->foreignId('employee_id')->constrained()->onDelete('cascade');
+                $table->string('employee_name');
+                $table->date('transaction_date');
+                $table->enum('type', ['initial', 'additional', 'adjustment', 'payment']);
+                $table->decimal('amount', 10, 2);
+                $table->decimal('previous_balance', 10, 2)->default(0);
+                $table->decimal('new_balance', 10, 2);
+                $table->string('reason');
+                $table->string('order_number')->nullable();
+                $table->text('notes')->nullable();
+                $table->timestamps();
         });
 
         Schema::create('deduction_balances', function (Blueprint $table) {

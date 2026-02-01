@@ -21,7 +21,6 @@
         </div>
     </div>
 
-    <!-- Employee Summary -->
     <div class="card mb-4">
         <div class="card-body">
             <div class="row">
@@ -85,7 +84,6 @@
         </div>
     </div>
 
-    <!-- Transactions Table -->
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Transaction History</h3>
@@ -188,7 +186,6 @@
 $(function () {
     $('[data-toggle="tooltip"]').tooltip();
 
-    // Print functionality
     $('#print-btn').click(function() {
         window.print();
     });

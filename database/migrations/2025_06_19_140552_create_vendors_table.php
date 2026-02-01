@@ -13,7 +13,7 @@ return new class extends Migration
             $table->id();
 
             $table->string('name')->unique();
-            $table->foreignId('category_id')->constrained('vendor_categories');
+            $table->foreignId(column: 'category_id')->constrained('vendor_categories');
 
             $table->string('contact_name')->nullable();
             $table->string('contact_email')->nullable();

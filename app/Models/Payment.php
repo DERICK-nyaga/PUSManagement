@@ -65,7 +65,7 @@ protected $fillable = [
 
     public function station()
     {
-        return $this->belongsTo(Station::class);
+        return $this->belongsTo(Station::class, 'station_id', 'station_id');
     }
 
     public function vendor()
@@ -83,7 +83,6 @@ protected $fillable = [
         return $this->belongsTo(User::class, 'approved_by');
     }
 
-    // Scopes
     public function scopeUpcoming($query)
     {
         return $query->where('status', '!=', 'paid')

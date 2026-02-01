@@ -11,7 +11,7 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('station_id')->constrained()->onDelete('cascade');
+            $table->foreignId('station_id')->constrained('stations', 'station_id')->onDelete('cascade');
             $table->foreignId('vendor_id')->nullable()->constrained();
             $table->string('title');
             $table->text('description')->nullable();

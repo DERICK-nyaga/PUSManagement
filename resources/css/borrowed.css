@@ -241,3 +241,37 @@ body {
     padding: 0;
 }
 
+        .card {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 8px;
+        }
+        .form-control {
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+        }
+        .btn {
+            border-radius: 6px;
+            padding: 8px 16px;
+        }
+        .btn-primary {
+            background-color: #4361ee;
+            border-color: #4361ee;
+        }
+        .btn-primary:hover {
+            background-color: #3a56d4;
+            border-color: #3a56d4;
+        }
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        .card-body {
+            padding: 1.5rem;
+        }
+        .balance-display {
+            min-height: 24px;
+            margin-top: 8px;
+        }

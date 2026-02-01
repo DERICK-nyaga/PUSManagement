@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('stations', function (Blueprint $table) {
-            $table->id();
+            $table->id('station_id');
             $table->string('name');
+            $table->string('mobile_number');
             $table->string('location');
             $table->decimal('monthly_loss', 10, 2)->default(0);
             $table->decimal('deductions', 10, 2)->default(2000);

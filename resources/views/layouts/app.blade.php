@@ -8,16 +8,20 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/order-numbers.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/employee-create.css') }}">
     <link rel="stylesheet" href="/css/modifiedstyles.css">
     @stack('styles')
 </head>
 <body>
     <div class="container-fluid">
         <div class="row">
-            @auth
+            {{-- @auth --}}
                 @include('partials.sidebar')
-            @endauth
+             {{-- @endauth --}}
 
+             
             <div class="col-md-10 main-content">
                 @yield('content')
             </div>
@@ -25,6 +29,12 @@
     </div>
 
     <script src="{{ mix('js/payments.js') }}"></script>
+    <script src="{{ mix('js/app.js') }}"></script>
+    <script src="{{ mix('js/employee-balance.js') }}"></script>
+    <script src="{{ mix('js/deductions.js') }}"></script>
+    <script src="{{ mix('js/employee-statuses.js') }}"></script>
+    <script src="{{ mix('js/airtime.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     @stack('scripts')
 </body>

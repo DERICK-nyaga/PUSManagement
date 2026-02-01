@@ -10,6 +10,8 @@ class Loss extends Model
     use HasFactory;
 
     protected $fillable = [
+        'first_name',
+        'last_name',
         'station_id',
         'employee_id',
         'amount',

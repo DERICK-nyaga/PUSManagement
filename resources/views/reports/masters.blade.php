@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('content')
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
     <div class="container">
         <a class="navbar-brand fw-bold" href="#">
@@ -11,12 +11,12 @@
 
         <div class="collapse navbar-collapse" id="navbarContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item mx-1">
+                {{-- <li class="nav-item mx-1">
                     <a class="nav-link px-3 py-2 rounded-3 {{ request()->routeIs('CheckReports') ? 'active bg-white text-primary' : '' }}"
                        href="{{ route('CheckReports') }}">
                         <i class="fas fa-list-check me-2"></i>All Reports
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-item mx-1">
                     <a class="nav-link px-3 py-2 rounded-3 {{ request()->routeIs('reports.create') ? 'active bg-white text-primary' : '' }}"
                        href="{{ route('reports.create') }}">
@@ -24,6 +24,22 @@
                     </a>
                 </li>
             </ul>
+
+            @if(auth()->user()->role === 'admin')
+<li class="nav-item mx-1">
+    <a class="nav-link px-3 py-2 rounded-3 {{ request()->routeIs('reports.handle') ? 'active bg-white text-primary' : '' }}"
+       href="{{ route('reports.handle') }}">
+        <i class="fas fa-tasks me-2"></i>Manage Reports
+    </a>
+</li>
+@endif
+
+<li class="nav-item mx-1">
+    <a class="nav-link px-3 py-2 rounded-3 {{ request()->routeIs('reports.index') ? 'active bg-white text-primary' : '' }}"
+       href="{{ route('reports.index') }}">
+        <i class="fas fa-file me-2"></i>My Reports
+    </a>
+</li>
 
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
@@ -50,3 +66,5 @@
 
     @yield('content')
 </div>
+
+@endsection

@@ -40,6 +40,8 @@ class LossController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'station_id' => 'required|exists:stations,id',
             'employee_id' => 'nullable|exists:employees,id',
             'amount' => 'required|numeric|min:0',

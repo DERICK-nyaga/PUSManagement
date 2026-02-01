@@ -14,7 +14,6 @@
                         @csrf
 
                         <div class="row">
-                            <!-- Basic Information Column -->
                             <div class="col-md-6">
                                 <h5 class="mb-3 border-bottom pb-2">Basic Information</h5>
 
@@ -77,7 +76,6 @@
                                 </div>
                             </div>
 
-                            <!-- Contact Information Column -->
                             <div class="col-md-6">
                                 <h5 class="mb-3 border-bottom pb-2">Contact Information</h5>
 
@@ -121,7 +119,6 @@
                         </div>
 
                         <div class="row mt-3">
-                            <!-- Financial Information Column -->
                             <div class="col-md-6">
                                 <h5 class="mb-3 border-bottom pb-2">Financial Information</h5>
 
@@ -144,7 +141,6 @@
                                 </div>
                             </div>
 
-                            <!-- Additional Information Column -->
                             <div class="col-md-6">
                                 <h5 class="mb-3 border-bottom pb-2">Additional Information</h5>
 

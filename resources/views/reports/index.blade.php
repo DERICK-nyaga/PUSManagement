@@ -3,7 +3,7 @@
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Reports</h1>
-        <a href="{{ route('reports') }}" class="btn btn-primary">Create New Report</a>
+        <a href="{{ route('reports.create') }}" class="btn btn-primary">Create New Report</a>
     </div>
 
     <div class="table-responsive">

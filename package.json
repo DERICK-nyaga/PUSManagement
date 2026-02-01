@@ -3,7 +3,11 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "dev": "vite",
+        "development": "mix",
+        "watch": "mix watch",
+        "prod": "npm run production",
+        "production": "mix --production"
     },
     "devDependencies": {
         "@popperjs/core": "^2.11.6",
@@ -11,9 +15,15 @@
         "axios": "^1.8.2",
         "bootstrap": "^5.2.3",
         "concurrently": "^9.0.1",
+        "laravel-mix": "^6.0.0",
         "laravel-vite-plugin": "^1.2.0",
         "sass": "^1.56.1",
         "tailwindcss": "^4.0.0",
-        "vite": "^6.2.4"
+        "vite": "^6.2.4",
+        "webpack": "^5.0.0"
+    },
+    "dependencies": {
+        "laravel-echo": "^2.2.6",
+        "pusher-js": "^8.4.0"
     }
 }

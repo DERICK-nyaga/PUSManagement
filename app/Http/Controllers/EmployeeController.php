@@ -32,7 +32,7 @@ class EmployeeController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:employees',
             'phone' => 'required|string|unique:employees|max:20',
-            'station_id' => 'required|exists:stations,id',
+            'station_id' => 'required|exists:stations,station_id',
             'employee_id' => 'required|string|unique:employees|min:7|max:12',
             'position' => 'required|string|max:255',
             'salary' => 'required|numeric|min:0',
@@ -60,14 +60,18 @@ class EmployeeController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => ['required', 'email', Rule::unique('employees')->ignore($employee->id)],
             'phone' => 'required|string|max:20',
-            'station_id' => 'required|exists:stations,id',
+            'station_id' => 'required|exists:stations,station_id',
             'position' => 'required|string|max:255',
             'salary' => 'required|numeric|min:0',
             'status' => ['required', Rule::in(['active', 'on_leave', 'terminated'])],
             'deduction_balance' => 'required|numeric|min:0'
         ]);
+        logger('Update Data:', $formFields);
+        logger('Employee Before Update:', $employee->toArray());
 
         $employee->update($formFields);
+
+            logger('Employee After Update:', $employee->fresh()->toArray());
 
         return redirect()->route('employees.index')
             ->with('success', 'Employee updated successfully!');
@@ -83,5 +87,11 @@ class EmployeeController extends Controller
     public function show(Employee $employee)
     {
         return view('employees.show', compact('employee'));
+    }
+
+    public function deductions(Employee $employee)
+    {
+        $employee->load('deductions');
+        return view('employees.deductions', compact('employee'));
     }
 }

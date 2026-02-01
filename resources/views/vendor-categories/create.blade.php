@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('content')
 @php
     $isEdit = isset($vendorCategory);
     $action = $isEdit ? route('vendor-categories.update', $vendorCategory) : route('vendor-categories.store');
@@ -36,3 +36,4 @@
         <a href="{{ route('vendor-categories.index') }}" class="btn btn-secondary">Cancel</a>
     </div>
 </form>
+@endsection

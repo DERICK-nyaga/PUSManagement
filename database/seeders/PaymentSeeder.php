@@ -4,6 +4,9 @@ namespace Database\Seeders;
 
 use App\Models\Payment;
 use App\Models\Station;
+use App\Models\InternetProvider;
+use App\Models\InternetPayment;
+use App\Models\AirtimePayment;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 

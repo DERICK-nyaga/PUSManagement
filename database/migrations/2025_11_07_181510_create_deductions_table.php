@@ -11,10 +11,11 @@ return new class extends Migration
     {
         Schema::create('deduction_transactions', function (Blueprint $table) {
                 $table->id();
+                $table->foreignId('station_id')->constrained('stations', 'station_id');
                 $table->foreignId('employee_id')->constrained()->onDelete('cascade');
                 $table->string('employee_name');
                 $table->date('transaction_date');
-                $table->enum('type', ['initial', 'additional', 'adjustment', 'payment']);
+                $table->enum('type', ['initial', 'additional', 'refund', 'payment']);
                 $table->decimal('amount', 10, 2);
                 $table->decimal('previous_balance', 10, 2)->default(0);
                 $table->decimal('new_balance', 10, 2)->default(0);

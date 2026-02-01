@@ -4,7 +4,7 @@
 <div class="container">
     <div class="card shadow-sm">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">Employee Management</h5>
+            <h5 class="mb-0" id="new-employee">Employee Management</h5>
             <a href="{{ route('employees.create') }}" class="btn btn-primary">
                 <i class="fas fa-plus"></i> Add Employee
             </a>
@@ -38,7 +38,7 @@
                             <td>{{ $employee->hire_date }}</td>
                             <td>{{ $employee->status }}</td>
                             <td>
-                                <a href="{{ route('employees.edit', $employee->id) }}" class="btn btn-sm btn-warning">
+                                <a href="{{ route('employees.edit', $employee->id) }}" class="btn btn-sm btn-warning" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <form action="{{ route('employees.destroy', $employee->id) }}" method="POST" class="d-inline">

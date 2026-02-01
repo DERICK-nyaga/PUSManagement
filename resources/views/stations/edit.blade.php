@@ -6,11 +6,11 @@
         <div class="col-md-8">
             <div class="card shadow-sm">
                 <div class="card-header">
-                    <h5 class="mb-0">Edit Station: {{ $station->name }}</h5>
+                    <h5 class="mb-0" id="new-station">Edit Station: {{ $station->name }}</h5>
                 </div>
 
                 <div class="card-body">
-                    <form action="{{ route('stations.update', $station->id) }}" method="POST">
+                    <form action="{{ route('stations.update', $station->station_id) }}" method="POST">
                         @csrf
                         @method('PUT')
 
@@ -28,6 +28,17 @@
                             <input type="text" class="form-control @error('location') is-invalid @enderror"
                                    id="location" name="location" value="{{ old('location', $station->location) }}" required>
                             @error('location')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mobile_number">Mobile Number</label>
+                            <input type="tel" class="form-control @error('mobile_number') is-invalid @enderror"
+                                id="mobile_number" name="mobile_number"
+                                value="{{ old('mobile_number', $station->mobile_number) }}"
+                                placeholder="e.g., 0712345678">
+                            @error('mobile_number')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
