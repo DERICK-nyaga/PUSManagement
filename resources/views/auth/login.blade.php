@@ -6,7 +6,7 @@
     <div class="row justify-content-center w-100">
         <div class="col-md-8 col-lg-6">
             <div class="card shadow-lg border-0 rounded-lg">
-                <div class="card-header bg-gradient-primary text-white text-center py-4">
+                <div class="card-header bg-gradient-primary text-grey text-center py-4">
                     <h3 class="mb-0">{{ __('Welcome Back') }}</h3>
                     <p class="mb-0">{{ __('Sign in to your account') }}</p>
                 </div>
