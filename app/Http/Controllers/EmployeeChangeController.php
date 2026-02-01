@@ -22,7 +22,6 @@ class EmployeeProfileController extends Controller
     {
         $oldData = $employee->toArray();
 
-        // Validate and update
         $validated = $request->validate([
             //validation rules
         ]);
@@ -73,19 +72,19 @@ class EmployeeProfileController extends Controller
             ->with('success', 'Change rejected successfully.');
     }
 
-private function checkAuthorization(EmployeeChangeLog $changeLog): void
-{
-    $user = Auth::user();
+    private function checkAuthorization(EmployeeChangeLog $changeLog): void
+    {
+        $user = Auth::user();
 
-    $isHrManager = in_array($user->email, ['hr@company.com', 'admin@company.com']);
-    $isAdmin = $user->id === 1;
+        $isHrManager = in_array($user->email, ['hr@company.com', 'admin@company.com']);
+        $isAdmin = $user->id === 1;
 
-    $isSupervisor = $changeLog->employee && $user->id === $changeLog->employee->reporting_to;
+        $isSupervisor = $changeLog->employee && $user->id === $changeLog->employee->reporting_to;
 
-    if (!$isHrManager && !$isAdmin && !$isSupervisor) {
-        abort(403, 'You are not authorized to approve/reject this change.');
+        if (!$isHrManager && !$isAdmin && !$isSupervisor) {
+            abort(403, 'You are not authorized to approve/reject this change.');
+        }
     }
-}
     private function requiresApproval(array $changes): bool
     {
         $sensitiveFields = [
