@@ -19,17 +19,17 @@
     <form action="{{ route('employees_profile.update', $employee) }}" method="POST">
         @csrf
         @method('PUT')
-@if(auth()->user()->hasRole(['hr_manager', 'department_head']))
-    <div class="alert alert-info">
-        <i class="bi bi-info-circle"></i>
-        As HR Manager/Department Head, your changes will be auto-approved.
-    </div>
-@else
-    <div class="alert alert-warning">
-        <i class="bi bi-clock-history"></i>
-        Your changes will be submitted for approval before being applied.
-    </div>
-@endif
+        @if(auth()->user()->hasRole(['hr_manager', 'department_head']))
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i>
+                As HR Manager/Department Head, your changes will be auto-approved.
+            </div>
+        @else
+            <div class="alert alert-warning">
+                <i class="bi bi-clock-history"></i>
+                Your changes will be submitted for approval before being applied.
+            </div>
+        @endif
         <div class="card mb-4">
             <div class="card-header bg-primary text-white">
                 <h5 class="mb-0"><i class="bi bi-person-badge"></i> Personal Information</h5>
